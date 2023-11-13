@@ -26,18 +26,8 @@ public class SaveServlet extends HttpServlet {
     private AccountsRepository accountsRepository;
 
     @Override
-    public void init() throws ServletException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            accountsRepository = new AccountsRepositoryJdbcImpl(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void init(ServletConfig config) throws ServletException {
+        accountsRepository = (AccountsRepository) config.getServletContext().getAttribute("accountRep");
     }
 
     @Override
@@ -56,7 +46,6 @@ public class SaveServlet extends HttpServlet {
                 .surnameOfUser(accountSurname)
                 .ageOfUser(accountAge)
                 .build();
-
         try {
             accountsRepository.save(user);
             response.sendRedirect("/minimal");
