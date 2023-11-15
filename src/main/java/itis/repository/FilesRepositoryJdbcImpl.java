@@ -38,12 +38,14 @@ public class FilesRepositoryJdbcImpl implements FilesRepository {
 
     @Override
     public void save(FileInfo entity) {
+        // jdbc template реализовать через PrepareStatement
         jdbcTemplate.update(SQL_INSERT, entity.getStorageFileName(), entity.getOriginalFileName(),
                 entity.getType(),
                 entity.getSize());
     }
 
     @Override
+    // реализовать через PreparedStatement
     public FileInfo findById(Long id) {
         return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, fileRowMapper, id);
     }
